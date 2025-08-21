@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import logo from '@/assets/logo.png'
-import { Bell, LogOut, Menu, Search, ShoppingBag, ShoppingCart, User, X } from 'lucide-react'
+import { Bell, LogOut, Menu, Search, ShoppingBag, User, X } from 'lucide-react'
 import { Link, useLocation, useNavigate, useResolvedPath } from 'react-router-dom'
 import { ScrollArea } from './ui/scroll-area'
 import useAuth from '@/hooks/useAuth'

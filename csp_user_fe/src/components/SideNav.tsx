@@ -1,5 +1,5 @@
 import logo from '../assets/logo.png'
-import { Activity, BaggageClaim, GripVertical, LayoutDashboard, PackageSearch, Settings, ShoppingBag, Store, Ticket, Users } from 'lucide-react'
+import { LayoutDashboard, Ticket } from 'lucide-react'
 import { Link, NavLink } from 'react-router-dom'
 
 interface SideNavProps{
