@@ -1,0 +1,93 @@
+# compiled output
+cps_be/dist
+cps_be/node_modules
+csp_user_fe/dist
+csp_user_fe/node_modules
+csp_admin_fe/dist
+csp_admin_fe/node_modules
+
+# Logs
+cps_be/cps_be/logs
+cps_be/cps_be/*.log
+cps_be/cps_be/npm-debug.log*
+cps_be/cps_be/pnpm-debug.log*
+cps_be/cps_be/yarn-debug.log*
+cps_be/cps_be/yarn-error.log*
+cps_be/cps_be/lerna-debug.log*
+
+# OS
+cps_be/.DS_Store
+
+# Tests
+cps_be/coverage
+cps_be/.nyc_output
+
+# IDEs and editors
+cps_be/.idea
+cps_be/.project
+cps_be/.classpath
+cps_be/.c9/
+cps_be/*.launch
+cps_be/.settings/
+cps_be/*.sublime-workspace
+
+# IDE - VSCode
+cps_be/.vscode/*
+cps_be/!.vscode/settings.json
+cps_be/!.vscode/tasks.json
+cps_be/!.vscode/launch.json
+cps_be/!.vscode/extensions.json
+
+csp_user_fe/.env
+csp_admin_fe/.env
+cps_be/.env
+
+# Logs
+csp_user_fe/logs
+csp_user_fe/*.log
+csp_user_fe/npm-debug.log*
+csp_user_fe/yarn-debug.log*
+csp_user_fe/yarn-error.log*
+csp_user_fe/pnpm-debug.log*
+csp_user_fe/lerna-debug.log*
+
+csp_user_fe/node_modules
+csp_user_fe/dist
+csp_user_fe/dist-ssr
+csp_user_fe/*.local
+
+# Editor directories and files
+csp_user_fe/.vscode/*
+csp_user_fe/!.vscode/extensions.json
+csp_user_fe/.idea
+csp_user_fe/.DS_Store
+csp_user_fe/*.suo
+csp_user_fe/*.ntvs*
+csp_user_fe/*.njsproj
+csp_user_fe/*.sln
+csp_user_fe/*.sw?
+
+# Logs
+csp_admin_fe/logs
+csp_admin_fe/*.log
+csp_admin_fe/npm-debug.log*
+csp_admin_fe/yarn-debug.log*
+csp_admin_fe/yarn-error.log*
+csp_admin_fe/pnpm-debug.log*
+csp_admin_fe/lerna-debug.log*
+
+csp_admin_fe/node_modules
+csp_admin_fe/dist
+csp_admin_fe/dist-ssr
+csp_admin_fe/*.local
+
+# Editor directories and files
+csp_admin_fe/.vscode/*
+csp_admin_fe/!.vscode/extensions.json
+csp_admin_fe/.idea
+csp_admin_fe/.DS_Store
+csp_admin_fe/*.suo
+csp_admin_fe/*.ntvs*
+csp_admin_fe/*.njsproj
+csp_admin_fe/*.sln
+csp_admin_fe/*.sw?
