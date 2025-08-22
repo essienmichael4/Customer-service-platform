@@ -24,7 +24,7 @@ const Login = () => {
                     </div>
                     <div className="hidden md:block">
                         <h2 className="font-bold text-4xl mb-2">Sign in</h2>
-                        <p className="text-neutral-500 text-xs lg:text-sm">Welcome to Ghana Post Admin - Let's help you sign in</p>
+                        <p className="text-neutral-500 text-xs lg:text-sm">Welcome to Ghana Post - Let's help you sign in</p>
                     </div>
 
                     <LoginForm />

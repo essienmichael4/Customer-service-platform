@@ -1,6 +1,8 @@
 import { Column, CreateDateColumn, Entity, JoinColumn, OneToMany, OneToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 import { Address } from "./address.entity";
 import { Department } from "./Department.entity";
+import { Ticket } from "src/ticket/entities/ticket.entity";
+import { Message } from "src/ticket/entities/message.entity";
 
 export enum Deleted {
     TRUE = 'TRUE',
@@ -53,4 +55,13 @@ export class User {
 
     @OneToMany(()=> Department, (department)=> department.user, {cascade: true})
     departments: Department[]
+
+    @OneToMany(() => Ticket, (ticket) => ticket.from)
+    tickets: Ticket[];
+
+    @OneToMany(() => Ticket, (ticket) => ticket.assignee)
+    assignedTickets: Ticket[];
+
+    @OneToMany(() => Message, (message) => message.authorUser)
+    messages: Message[];
 }
