@@ -50,3 +50,13 @@ export type TicketType = {
     id: number,
     name: string
 }
+
+export type User = {
+    id: number | null,
+    name: string,
+    email: string,
+    phone?: string,
+    role?: string,
+    createdAt?: string,
+    updatedAt?:string,
+}

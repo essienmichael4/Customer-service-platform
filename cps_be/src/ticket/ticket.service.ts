@@ -110,10 +110,16 @@ export class TicketService {
     return await this.ticketTypeRepo.save({name: createTicketTypeDto.name})
   }
 
-  async findAllTickets(pageOptionsDto:PageOptionsDto,) {
+  async findAllTickets(pageOptionsDto:PageOptionsDto, userId?:number) {
     const tickets = await this.ticketRepo.findAndCount({
+      where: {
+        ...(userId && {from: {
+          id: userId
+        }})
+      },
       relations:{
-        type: true
+        type: true,
+        from: true
       },
       order:{
         id: "DESC"

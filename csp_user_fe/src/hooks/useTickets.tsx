@@ -6,7 +6,7 @@ export const useTickets = (page: number, limit: number) => {
     const axios_instance_token = useAxiosToken()
     return useQuery<Data>({
         queryKey: ["tickets", page, limit],
-        queryFn: async() => await axios_instance_token.get(`/tickets`, {
+        queryFn: async() => await axios_instance_token.get(`/tickets/user`, {
             params: { page, take: limit }
         }).then(res => {
             console.log(res.data);

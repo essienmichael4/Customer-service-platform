@@ -3,9 +3,12 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { User } from './entities/user.entity';
+import { Role, User } from './entities/user.entity';
 import { v4 } from 'uuid';
 import { hash } from 'bcryptjs';
+import { PageOptionsDto } from 'src/common/dto/pageOptions.dto';
+import { PageMetaDto } from 'src/common/dto/pageMeta.dto';
+import { PageDto } from 'src/common/dto/page.dto';
 
 @Injectable()
 export class UserService {
@@ -37,12 +40,43 @@ export class UserService {
     return await this.userRepo.findOneBy({email})
   }
 
-  findAll() {
-    return `This action returns all user`;
+  async findAll(pageOptionsDto:PageOptionsDto) {
+    const clients = await this.userRepo.findAndCount({
+      order:{
+        id: "DESC"
+      },
+      take: pageOptionsDto.take,
+      skip: pageOptionsDto.skip
+    })
+
+    // const ticketsResponse = clients[0].map(ticket=> new TicketResponseDto(ticket))
+    
+      const pageMetaDto = new PageMetaDto({itemCount: clients[1], pageOptionsDto})
+      return new PageDto(clients[0], pageMetaDto)
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} user`;
+  async findAllClients() {
+    return await this.userRepo.find({
+      where: {
+        role: Role.USER
+      }
+    })
+  }
+
+  async findAllAdmins() {
+    return await this.userRepo.find({
+      where: {
+        role: Role.ADMIN
+      }
+    })
+  }
+
+  async findOne(id: number) {
+    return await this.userRepo.findOne({
+      where: {
+        id
+      }
+    })
   }
 
   update(id: number, updateUserDto: UpdateUserDto) {

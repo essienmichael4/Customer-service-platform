@@ -12,6 +12,9 @@ import { useState } from "react"
 import Tags from "./Tags"
 import { toast } from "sonner"
 import axios from "axios"
+import PriorityPicker from "./PriorityPicker"
+import AdminPicker from "./AdminPicker"
+import ClientPicker from "./ClientPicker"
 
 interface Props{
   page: number,
@@ -22,6 +25,8 @@ interface Props{
 
 const CreateTicketModal = ({page, limit, open, onOpenChange}:Props) => {
   const [tag, setTag] = useState('')
+  const [assinged, setAssinged] = useState<number | null>()
+  const [from, setFrom] = useState<number | null>()
   const [tags, setTags] = useState<string[]>([])
   const axios_instance_token = useAxiosToken()
   const queryClient = useQueryClient()
@@ -63,6 +68,8 @@ const CreateTicketModal = ({page, limit, open, onOpenChange}:Props) => {
 
   const addTicket = async (data:TicketSchemaType)=>{
     const response = await axios_instance_token.post(`/tickets`, {
+      assignee: assinged,
+      from,
       ...data,
       tags,
     },)
@@ -114,10 +121,22 @@ const CreateTicketModal = ({page, limit, open, onOpenChange}:Props) => {
           <div className="flex justify-between px-8">
             <div className="max-w-1/2 px-2 py-4">
               <FormField
+                // control={form.control}
+                name="from"
+                render={({}) =>(
+                  <FormItem className='flex-1'>
+                    <FormLabel className='text-xs'>From</FormLabel>
+                    <FormControl>
+                      <ClientPicker onChange={setFrom} />
+                    </FormControl>
+                  </FormItem>
+                )} 
+              />
+              <FormField
                   control={form.control}
                   name="message"
                   render={({field}) =>(
-                      <FormItem className='w-full'>
+                      <FormItem className='w-full mt-2'>
                           <FormLabel className='text-xs'>Message</FormLabel>
                           <FormControl>
                               <Tiptap onChange={field.onChange} />
@@ -139,6 +158,18 @@ const CreateTicketModal = ({page, limit, open, onOpenChange}:Props) => {
                   </FormItem>
                 )} 
               />
+              <FormField
+                control={form.control}
+                name="priority"
+                render={({field}) =>(
+                  <FormItem className='flex-1'>
+                    <FormLabel className='text-xs'>Priority</FormLabel>
+                    <FormControl>
+                      <PriorityPicker  onChange={field.onChange}/>
+                    </FormControl>
+                  </FormItem>
+                )} 
+              />
               <FormField 
                 name="ticketType"
                 render={({field}) =>(
@@ -151,6 +182,20 @@ const CreateTicketModal = ({page, limit, open, onOpenChange}:Props) => {
                   </FormItem>
                 )} 
               />
+
+              <FormField
+                // control={form.control}
+                name="assignedTo"
+                render={({}) =>(
+                  <FormItem className='flex-1'>
+                    <FormLabel className='text-xs'>Assigne to</FormLabel>
+                    <FormControl>
+                      <AdminPicker  onChange={setAssinged}/>
+                    </FormControl>
+                  </FormItem>
+                )} 
+              />
+
               <Tags 
                   handleChange={handleChange} 
                   tag={tag}

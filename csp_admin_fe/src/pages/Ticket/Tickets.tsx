@@ -23,7 +23,7 @@ const Tickets = () => {
                 </div>
                 <div>
                     <button onClick={()=>handleOpenChange()}  className="py-2 px-2 md:px-4 flex items-center rounded-md bg-gradient-to-r from-blue-500 to-blue-800 text-white">
-                        <Plus className="w-4 h-4 mr-2 text-white"/> <span className="text-xs md:text-sm">Add Package</span>
+                        <Plus className="w-4 h-4 mr-2 text-white"/> <span className="text-xs md:text-sm">Add Ticket</span>
                     </button>
                 </div>
             </div>

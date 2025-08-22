@@ -29,7 +29,7 @@ const TicketsTable = ({page, limit, setLimit, setPage}:FilterProps) => {
     },{
         accessorKey: "subject",
         header:({column})=>(<DataTableColumnHeader column={column} title='Subject' />),
-        cell:({row}) => <div className="lg:min-w-[450px] overflow-ellipsis">
+        cell:({row}) => <div className="lg:min-w-[350px] text-clamp-1 overflow-ellipsis">
                 {row.original.subject}
         </div>
     },{
@@ -38,6 +38,14 @@ const TicketsTable = ({page, limit, setLimit, setPage}:FilterProps) => {
         cell:({row}) => <div>
             {row.original.priority}
         </div>
+    },{
+        accessorKey: "from.name",
+        header:({column})=>(<DataTableColumnHeader column={column} title='Client' />),
+        cell:({row}) => {
+            return <div className='text-muted-foreground text-nowrap'>
+                {row.original.from?.name}
+            </div>
+        }
     },{
         accessorKey: "type.name",
         header:({column})=>(<DataTableColumnHeader column={column} title='Type' />),
