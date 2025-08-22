@@ -7,9 +7,10 @@ import { JwtService } from '@nestjs/jwt';
 import { Branch } from './entities/branch.entity';
 import { Department } from './entities/Department.entity';
 import { Address } from './entities/address.entity';
+import { Message } from 'src/ticket/entities/message.entity';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([User, Branch, Department, Address])],
+  imports: [TypeOrmModule.forFeature([User, Branch, Department, Address, Message])],
   controllers: [UserController],
   providers: [UserService, JwtService],
   exports:[UserService]

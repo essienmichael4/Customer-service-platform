@@ -8,6 +8,7 @@ import Dashboard from './pages/Dashboard/Dashboard'
 import Home from './pages/Home/Home'
 import AuthLayout from './components/AuthLayout'
 import Tickets from './pages/Ticket/Tickets'
+import Ticket from './pages/Ticket/Ticket'
 
 function App() {
 
@@ -23,6 +24,7 @@ function App() {
           <Route element={<AuthLayout />}>
             <Route path='/dashboard' element={<Dashboard />} />
             <Route path='/tickets' element={<Tickets />} />
+            <Route path='/tickets/:id' element={<Ticket />} />
           </Route>
         </Route>
       </Routes>
