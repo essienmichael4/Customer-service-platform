@@ -5,8 +5,8 @@ import { useEffect, useState } from 'react'
 import { Check, ChevronsUpDown } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { useQuery } from '@tanstack/react-query'
-import { axios_instance_token } from '@/api/axios'
 import type { TicketType } from '@/lib/types'
+import useAxiosToken from '@/hooks/useAxiosToken'
 
 interface Props {
     onChange: (value: string)=>void,
@@ -14,6 +14,7 @@ interface Props {
 }
 
 const TicketTypePicker = ({onChange, defaultValue}:Props) => {
+    const axios_instance_token = useAxiosToken()
     const [open, setOpen] = useState(false)
     const [value, setValue] = useState<string>("")
 

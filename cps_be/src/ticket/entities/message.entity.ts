@@ -3,9 +3,9 @@ import { User } from "src/user/entities/user.entity";
 import { Ticket } from "./ticket.entity";
 
 export enum MessageAuthorType {
-  USER = "USER",
-  CUSTOMER = "CUSTOMER",
-  SYSTEM = "SYSTEM",
+  ADMIN = 'ADMIN',
+  USER = 'USER',
+  SUPERADMIN = 'SUPERADMIN'
 }
 
 export enum MessageKind {
@@ -22,7 +22,7 @@ export class Message {
   ticket: Ticket;
 
   @ManyToOne(() => User, (user) => user.messages, { nullable: true })
-  authorUser: User;
+  author: User;
 
   @Column({ type: "enum", enum: MessageAuthorType })
   authorType: MessageAuthorType;
