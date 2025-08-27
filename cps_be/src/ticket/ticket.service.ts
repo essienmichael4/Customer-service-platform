@@ -1,8 +1,8 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateTicketDto, CreateTicketTypeDto } from './dto/create-ticket.dto';
-import { UpdateTicketDto } from './dto/update-ticket.dto';
+import { UpdateTicketDto, UpdateTicketPrioirityDto, UpdateTicketStatusDto, UpdateTicketTypeDto } from './dto/update-ticket.dto';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Ticket, TicketPriority } from './entities/ticket.entity';
+import { Ticket, TicketPriority, TicketStatus } from './entities/ticket.entity';
 import { DataSource, QueryRunner, Repository } from 'typeorm';
 import { User } from 'src/user/entities/user.entity';
 import { Department } from 'src/user/entities/Department.entity';
@@ -17,13 +17,17 @@ import { PageOptionsDto } from 'src/common/dto/pageOptions.dto';
 import { PageMetaDto } from 'src/common/dto/pageMeta.dto';
 import { PageDto } from 'src/common/dto/page.dto';
 import { TicketResponseDto } from './dto/response.dto';
+import { TicketLog, TicketLogAction } from './entities/log.entity';
+import { Message, MessageAuthorType, MessageKind } from './entities/message.entity';
 
 @Injectable()
 export class TicketService {
   constructor(
     @InjectRepository(Ticket) private readonly ticketRepo:Repository<Ticket>,
+    @InjectRepository(TicketLog) private readonly ticketLogRepo:Repository<TicketLog>,
     @InjectRepository(TicketType) private readonly ticketTypeRepo:Repository<TicketType>,
     @InjectRepository(Tag) private readonly tagRepo:Repository<Tag>,
+    @InjectRepository(Message) private readonly messageRepo:Repository<Message>,
     @InjectRepository(User) private readonly userRepo:Repository<User>,
     @InjectRepository(Department) private readonly departmentRepo:Repository<Department>,
     @InjectRepository(MonthHistory) private readonly monthHistoryRepo:Repository<MonthHistory>,
@@ -32,6 +36,21 @@ export class TicketService {
     @InjectRepository(UserYearHistory) private readonly userYearHistoryRepo:Repository<UserYearHistory>,
     private readonly dataSource:DataSource
   ){}
+
+  async addMessage(ticketId: number, text: string, authorId: number, kind: MessageKind): Promise<Message> {
+    const ticket = await this.ticketRepo.findOneOrFail({ where: { id: ticketId } });
+    const author = await this.userRepo.findOne({where: { id: authorId}})
+    const authorType = author.role as unknown
+    const message = this.messageRepo.create({
+      ticket,
+      author: author,
+      authorType: authorType as MessageAuthorType,
+      kind,
+      body: text,
+    });
+
+    return await this.messageRepo.save(message);
+  }
 
   async create(createTicketDto: CreateTicketDto, userId?:number) {
     const queryRunner = this.dataSource.createQueryRunner()
@@ -83,11 +102,14 @@ export class TicketService {
 
       const ticket = await this.createTicket(saveEntity, queryRunner)
       await Promise.all([
+        this.createTicketLog(ticket, queryRunner, user),
         this.upsertMonthHistoryTickets(queryRunner),
         this.upsertYearHistoryTickets(queryRunner),
         this.upsertUserYearHistoryTickets(user.id, queryRunner),
         this.upsertUserMonthHistoryTickets(user.id, queryRunner),
       ]);
+      
+      createTicketDto.assignee && await this.addTicketAssignee(ticket, queryRunner, assignee, user)
 
       await queryRunner.commitTransaction()
 
@@ -108,6 +130,24 @@ export class TicketService {
 
   async createTicketType(createTicketTypeDto: CreateTicketTypeDto){
     return await this.ticketTypeRepo.save({name: createTicketTypeDto.name})
+  }
+
+  async createTicketLog(payload:Ticket, queryRunner: QueryRunner, actor: User){
+    return await queryRunner.manager.save(TicketLog, {
+      action: TicketLogAction.CREATED,
+        ticket: payload,
+        actor,
+        details: `Ticket created with status ${payload.status}`,
+    })
+  }
+
+  async addTicketAssignee(payload:Ticket, queryRunner: QueryRunner, assignee:User, actor: User){
+    return await queryRunner.manager.save(TicketLog, {
+      action: TicketLogAction.ASSIGNED,
+      ticket: payload,
+      actor,
+      details: `Assigned to ${assignee.name}`,
+    })
   }
 
   async findAllTickets(pageOptionsDto:PageOptionsDto, userId?:number) {
@@ -138,12 +178,110 @@ export class TicketService {
     return await this.ticketTypeRepo.find()
   }
 
+  findTicketDetails(id: number) {
+    return this.ticketRepo.findOne({
+      where: {id},
+      relations: {
+        type: true,
+        from: true,
+        assignee: true,
+        messages: {
+          author: true
+        },
+        tags: true,
+        logs: {
+          actor: true
+        }
+      }
+    })
+  }
+
   findOne(id: number) {
     return `This action returns a #${id} ticket`;
   }
 
   update(id: number, updateTicketDto: UpdateTicketDto) {
     return `This action updates a #${id} ticket`;
+  }
+
+  // updateTicketStatus(id: number, updateTicketStatusDto: UpdateTicketStatusDto) {
+  //   return this.ticketRepo.update(id, {status: updateTicketStatusDto.status as TicketStatus});
+  // }
+
+  async updateTicketStatus(ticketId: number, updateTicketStatusDto: UpdateTicketStatusDto, userId: number) {
+    const ticket = await this.ticketRepo.findOne({ where: { id: ticketId }, relations: ["logs"] });
+    if (!ticket) throw new NotFoundException("Ticket not found");
+
+    const oldStatus = ticket.status;
+    ticket.status = updateTicketStatusDto.status as TicketStatus;
+
+    // Create log
+    const log = this.ticketLogRepo.create({
+      ticket,
+      actor: { id: userId } as any,
+      action: TicketLogAction.UPDATED_STATUS,
+      details: `Status changed from ${oldStatus} → ${updateTicketStatusDto.status as TicketStatus}`,
+    });
+
+    await this.ticketRepo.save(ticket);
+    await this.ticketLogRepo.save(log);
+
+    return ticket;
+  }
+
+  updateTicketType(id: number, updateTicketTypeDto: UpdateTicketTypeDto) {
+    return this.ticketRepo.save({
+      id, // Ticket id
+      type: { id: updateTicketTypeDto.typeId } as any, // Relational field
+    });
+  }
+
+  // updateTicketPriority(id: number, updateTicketPrioirityDto: UpdateTicketPrioirityDto) {
+  //   return this.ticketRepo.update(id, {
+  //     priority: updateTicketPrioirityDto.priority as TicketPriority
+  //   });
+  // }
+
+  async updateTicketPriority(ticketId: number, updateTicketPrioirityDto: UpdateTicketPrioirityDto, userId: number) {
+    const ticket = await this.ticketRepo.findOne({ where: { id: ticketId }, relations: ["logs"] });
+    if (!ticket) throw new NotFoundException("Ticket not found");
+
+    const oldPriority = ticket.priority;
+    ticket.priority = updateTicketPrioirityDto.priority as TicketPriority;
+
+    // Create log entry
+    const log = this.ticketLogRepo.create({
+      ticket,
+      actor: { id: userId } as any,
+      action: TicketLogAction.UPDATED_PRIORITY,
+      details: `Priority changed from ${oldPriority} → ${updateTicketPrioirityDto.priority as TicketPriority}`,
+    });
+
+    await this.ticketRepo.save(ticket);
+    await this.ticketLogRepo.save(log);
+
+    return ticket;
+  }
+
+  async updateTicketAssignee(ticketId: number, updateTicketPrioirityDto: UpdateTicketPrioirityDto, userId: number) {
+    const ticket = await this.ticketRepo.findOne({ where: { id: ticketId }, relations: ["logs"] });
+    if (!ticket) throw new NotFoundException("Ticket not found");
+
+    const oldPriority = ticket.priority;
+    ticket.priority = updateTicketPrioirityDto.priority as TicketPriority;
+
+    // Create log entry
+    const log = this.ticketLogRepo.create({
+      ticket,
+      actor: { id: userId } as any,
+      action: TicketLogAction.UPDATED_PRIORITY,
+      details: `Priority changed from ${oldPriority} → ${updateTicketPrioirityDto.priority as TicketPriority}`,
+    });
+
+    await this.ticketRepo.save(ticket);
+    await this.ticketLogRepo.save(log);
+
+    return ticket;
   }
 
   async upsertMonthHistoryTickets(queryRunner: QueryRunner){

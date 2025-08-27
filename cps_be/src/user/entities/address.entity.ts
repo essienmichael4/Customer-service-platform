@@ -27,6 +27,9 @@ export class Address {
     @Column({nullable:true})
     city:string
 
+    @Column({nullable:true})
+    country:string
+
     @Column()
     addressLineOne:string
 

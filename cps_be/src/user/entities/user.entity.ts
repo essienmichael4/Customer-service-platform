@@ -62,6 +62,6 @@ export class User {
     @OneToMany(() => Ticket, (ticket) => ticket.assignee)
     assignedTickets: Ticket[];
 
-    @OneToMany(() => Message, (message) => message.authorUser)
+    @OneToMany(() => Message, (message) => message.author)
     messages: Message[];
 }

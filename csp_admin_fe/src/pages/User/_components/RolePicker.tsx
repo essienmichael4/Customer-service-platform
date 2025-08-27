@@ -1,67 +1,56 @@
+'use client'
+
 import { Button } from '@/components/ui/button'
 import { Command, CommandGroup, CommandInput, CommandItem, CommandList } from '@/components/ui/command'
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
 import { useEffect, useState } from 'react'
 import { Check, ChevronsUpDown } from 'lucide-react'
 import { cn } from '@/lib/utils'
-import { useQuery } from '@tanstack/react-query'
-import type { TicketType } from '@/lib/types'
-import useAxiosToken from '@/hooks/useAxiosToken'
 
 interface Props {
-    onChange: (value: string)=>void,
-    defaultValue?: string
+    onChange: (value: "ADMIN" | "USER")=>void
 }
 
-const TicketTypePicker = ({onChange, defaultValue}:Props) => {
-    const axios_instance_token = useAxiosToken()
+const RolePicker = ({onChange}:Props) => {
+    const stat:("ADMIN" | "USER")[] = ["ADMIN", "USER"]
     const [open, setOpen] = useState(false)
-    const [value, setValue] = useState<string>("")
-
-    useEffect(() => {
-        if (defaultValue) {
-            setValue(defaultValue);
-        }
-    }, [defaultValue]);
+    const [value, setValue] = useState<"ADMIN" | "USER">("USER")
 
     useEffect(()=>{
         if(!value) return
         onChange(value)
     }, [onChange, value])
 
-    const ticketsTypeQuery =  useQuery<TicketType[]>({
-        queryKey: ["tickets", "type"],
-        queryFn: async() => await axios_instance_token.get("/tickets/types").then(res => res.data)
-    })
+    
 
-    const selectedTicketType = ticketsTypeQuery.data?.find((ticketType:TicketType)=> ticketType.name === value)
+    const selectedCategory = stat.find((status:"ADMIN" | "USER")=> status === value)
 
     return (
         <Popover open={open} onOpenChange={setOpen}>
             <PopoverTrigger asChild>
                 <Button variant={"outline"} role='combobox' aria-expanded={open} className='w-full text-xs justify-between'>
-                    {selectedTicketType ? (
-                        <StatusRow ticketType={selectedTicketType.name} />
+                    {selectedCategory ? (
+                        <StatusRow status={selectedCategory} />
                     ) : (
-                        "Select ticket type"
+                        "Select role"
                     )}
                     <ChevronsUpDown className='ml-2 h-4 w-4 shrink-0 opacity-50'/>
                 </Button>
             </PopoverTrigger>
             <PopoverContent className='wi[200px] p-0'>
                 <Command onSubmit={e=> e.preventDefault()}>
-                    <CommandInput placeholder='Search ticket types'/>
+                    <CommandInput placeholder='Search role'/>
                     <CommandGroup>
                         <CommandList>
-                            {ticketsTypeQuery?.data && 
-                                ticketsTypeQuery.data.map((ticketType:TicketType) => {
+                            {stat.map((status:"ADMIN" | "USER") => {                              
+                                    // console.log(categoriesQuery.data)
                                     return (
-                                        <CommandItem key={ticketType.id} onSelect={()=>{
-                                            setValue(ticketType.name)
+                                        <CommandItem key={status} onSelect={()=>{
+                                            setValue(status)
                                             setOpen(prev=>!prev)
                                         }}>
-                                        <StatusRow ticketType={ticketType.name} />
-                                        <Check className={cn("mr-2 w-4 h-4 opacity-0", value===ticketType.name && "opacity-100")} />
+                                        <StatusRow status={status} />
+                                        <Check className={cn("mr-2 w-4 h-4 opacity-0", value===status && "opacity-100")} />
                                         </CommandItem>
                                     )
                                 })}
@@ -73,13 +62,13 @@ const TicketTypePicker = ({onChange, defaultValue}:Props) => {
     )
 }
 
-function StatusRow({ticketType}:{ticketType:string}){
+function StatusRow({status}:{status:"ADMIN" | "USER"}){
     return (
         <div className="flex items-center gap-2 text-xs">
             {/* <span role='img'>{category.icon}</span> */}
-            <span>{ticketType}</span>
+            <span>{status}</span>
         </div>
     )
 }
 
-export default TicketTypePicker
+export default RolePicker

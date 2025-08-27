@@ -4,6 +4,8 @@ import { Department } from "src/user/entities/Department.entity";
 import { User } from "src/user/entities/user.entity";
 import { Message } from "./message.entity";
 import { TicketType } from "./Type.entity";
+import { TicketLog } from "./log.entity";
+
 
 export enum TicketStatus {
   NEW = "NEW",
@@ -48,6 +50,9 @@ export class Ticket {
 
     @OneToMany(() => Message, (message) => message.ticket)
     messages: Message[];
+
+    @OneToMany(() => TicketLog, (log) => log.ticket, {cascade: true})
+    logs: TicketLog[];
 
     @CreateDateColumn()
     createdAt: Date;

@@ -6,9 +6,13 @@ import RequireAuth from './components/RequireAuth'
 import Dashboard from './pages/Dashboard/Dashboard'
 import AuthLayout from './components/AuthLayout'
 import Tickets from './pages/Ticket/Tickets'
-import Ticket from './pages/Ticket/Ticket'
+// import Ticket from './pages/Ticket/Ticket'
 import Clients from './pages/Client/Clients'
 import Client from './pages/Client/Client'
+import Users from './pages/User/Users'
+import User from './pages/User/User'
+import Ticket from './pages/Ticket/Ticket'
+
 
 function App() {
 
@@ -24,6 +28,8 @@ function App() {
             <Route path='/tickets/:id' element={<Ticket />} />
             <Route path='/clients' element={<Clients />} />
             <Route path='/clients/:id' element={<Client />} />
+            <Route path='/users' element={<Users />} />
+            <Route path='/users/:id' element={<User />} />
           </Route>
         </Route>
       </Routes>

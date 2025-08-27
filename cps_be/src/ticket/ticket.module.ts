@@ -13,9 +13,10 @@ import { MonthHistory } from './entities/MonthHistory.entity';
 import { UserMonthHistory } from './entities/UserMonthHistory.entity';
 import { UserYearHistory } from './entities/UserYearHistory.entity';
 import { JwtService } from '@nestjs/jwt';
+import { TicketLog } from './entities/log.entity';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Ticket, Tag, Message, TicketType, User, Department, YearHistory, MonthHistory, UserMonthHistory, UserYearHistory])],
+  imports: [TypeOrmModule.forFeature([Ticket, Tag, Message, TicketType, User, TicketLog, Department, YearHistory, MonthHistory, UserMonthHistory, UserYearHistory])],
   controllers: [TicketController],
   providers: [TicketService, JwtService],
 })

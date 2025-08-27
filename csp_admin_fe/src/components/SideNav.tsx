@@ -1,5 +1,6 @@
 import logo from '../assets/logo.png'
-import { LayoutDashboard, Ticket, Users } from 'lucide-react'
+import { LayoutDashboard, Ticket, Users, Users2 } from 'lucide-react'
+
 import { Link, NavLink } from 'react-router-dom'
 
 interface SideNavProps{
@@ -46,6 +47,10 @@ const SideNav = ({isToggled}:SideNavProps) => {
             <NavLink to={"/clients"} className='pl-2 py-2 flex items-center flex-shrink-0 mb-2 text-muted-foreground'>
                 <Users className='h-4 w-4 mr-6' />
                 <span className=''>Clients</span>
+            </NavLink>
+            <NavLink to={"/users"} className='pl-2 py-2 flex items-center flex-shrink-0 mb-2 text-muted-foreground'>
+                <Users2 className='h-4 w-4 mr-6' />
+                <span className=''>Users</span>
             </NavLink>
             {/* <NavLink to={"/settings"} className='pl-2 py-2 flex items-center flex-shrink-0 mb-2 text-muted-foreground'>
                 <Settings className='h-4 w-4 mr-6' />

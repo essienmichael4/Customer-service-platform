@@ -9,6 +9,7 @@ import Home from './pages/Home/Home'
 import AuthLayout from './components/AuthLayout'
 import Tickets from './pages/Ticket/Tickets'
 import Ticket from './pages/Ticket/Ticket'
+import Profile from './pages/User/Profile'
 
 function App() {
 
@@ -25,6 +26,7 @@ function App() {
             <Route path='/dashboard' element={<Dashboard />} />
             <Route path='/tickets' element={<Tickets />} />
             <Route path='/tickets/:id' element={<Ticket />} />
+            <Route path='/profile/:id' element={<Profile />} />
           </Route>
         </Route>
       </Routes>

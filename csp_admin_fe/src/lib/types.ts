@@ -35,6 +35,23 @@ export type Meta = {
     hasNextPage: boolean
 }
 
+export type Message = {
+    id: number,
+    author: User,
+    authorType: string,
+    kind: string,
+    body: string,
+    createdAt: string
+}
+
+export type TicketLog = {
+    id: number,
+    action: string,
+    details: string,
+    actor: User,
+    createdAt: string
+}
+
 export type Ticket = {
     id: number,
     subject: string,
@@ -43,7 +60,11 @@ export type Ticket = {
     createdAt: string,
     firstResponseAt: string,
     type: TicketType,
-    from: any,
+    from: User,
+    assignee: User,
+    status: string,
+    messages: Message[],
+    logs: TicketLog[]
 }
 
 export type TicketType = {
@@ -59,4 +80,5 @@ export type User = {
     role?: string,
     createdAt?: string,
     updatedAt?:string,
+    address: any
 }
