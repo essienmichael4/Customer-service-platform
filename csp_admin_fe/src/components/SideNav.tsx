@@ -1,5 +1,6 @@
 import logo from '../assets/logo.png'
 import { LayoutDashboard, Ticket, Users, Users2 } from 'lucide-react'
+
 import { Link, NavLink } from 'react-router-dom'
 
 interface SideNavProps{

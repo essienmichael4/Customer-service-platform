@@ -24,6 +24,7 @@ export class Message {
   @ManyToOne(() => User, (user) => user.messages, { nullable: true })
   author: User;
 
+
   @Column({ type: "enum", enum: MessageAuthorType })
   authorType: MessageAuthorType;
 
