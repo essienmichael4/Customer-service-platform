@@ -5,6 +5,18 @@ interface Action {
     payload?: AuthType
 }
 
+export type Address = {
+    id:number,
+    addressId?: string
+    country?: string,
+    city?: string,
+    state?: string,
+    addressType: string,
+    addressLineOne:string,
+    addressLineTwo?:string,
+    landmark?:string
+}
+
 export type AuthType = {
     name: string,
     email: string,
@@ -35,6 +47,23 @@ export type Meta = {
     hasNextPage: boolean
 }
 
+export type Message = {
+    id: number,
+    author: User,
+    authorType: string,
+    kind: string,
+    body: string,
+    createdAt: string
+}
+
+export type TicketLog = {
+    id: number,
+    action: string,
+    details: string,
+    actor: User,
+    createdAt: string
+}
+
 export type Ticket = {
     id: number,
     subject: string,
@@ -43,10 +72,25 @@ export type Ticket = {
     createdAt: string,
     firstResponseAt: string,
     type: TicketType,
-    from: any,
+    from: User,
+    assignee: User,
+    status: string,
+    messages: Message[],
+    logs: TicketLog[]
 }
 
 export type TicketType = {
     id: number,
     name: string
+}
+
+export type User = {
+    id: number | null,
+    name: string,
+    email: string,
+    phone?: string,
+    role?: string,
+    createdAt?: string,
+    updatedAt?:string,
+    address: any
 }

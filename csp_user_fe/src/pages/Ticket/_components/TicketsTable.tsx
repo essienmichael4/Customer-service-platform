@@ -2,8 +2,9 @@ import { DataTableColumnHeader } from "@/components/DataTable/ColumnHeader"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { useTickets } from "@/hooks/useTickets"
 import type { Ticket } from "@/lib/types"
+import { QuestionMarkCircledIcon } from "@radix-ui/react-icons"
 import { flexRender, getCoreRowModel, getPaginationRowModel, useReactTable, type ColumnDef } from "@tanstack/react-table"
-import { ChevronsLeft, ChevronLeft, ChevronRight, ChevronsRight } from "lucide-react"
+import { ChevronsLeft, ChevronLeft, ChevronRight, ChevronsRight, House, Lightbulb, OctagonAlert, Puzzle } from "lucide-react"
 import { Link } from "react-router-dom"
 
 interface FilterProps{
@@ -42,10 +43,21 @@ const TicketsTable = ({page, limit, setLimit, setPage}:FilterProps) => {
         accessorKey: "type.name",
         header:({column})=>(<DataTableColumnHeader column={column} title='Type' />),
         cell:({row}) => {
-            return <div className='text-muted-foreground text-nowrap'>
+            return <div className='text-muted-foreground text-nowrap flex items-center gap-2'>
+                {row.original?.type.name === "INCIDENT" && <House />}
+                {row.original?.type.name === "PROBLEM" && <Puzzle />}
+                {row.original?.type.name === "SUGESTION" && <Lightbulb />}
+                {row.original?.type.name === "COMPLIANT" && <OctagonAlert />}
+                {row.original?.type.name === "QUESTION" && <QuestionMarkCircledIcon className="w-3 h-3" />}
                 {row.original.type?.name}
             </div>
         }
+    },{
+        accessorKey: "status",
+        header:({column})=>(<DataTableColumnHeader column={column} title='Status' />),
+        cell:({row}) => <div className={`${row.original.status === "OPEN" && "text-emerald-500 bg-emerald-100"} ${row.original.status === "CLOSED" && "text-rose-500 bg-rose-100"} ${row.original.status === "NEW" && "text-cyan-500 bg-cyan-100"} ${row.original.status === "PENDING" && "text-yellow-500 bg-yellow-100"} ${row.original.status === "RESOLVED" && "text-purple-500 bg-purple-100"} py-2 px-4 flex items-center justify-center text-xs rounded-full`}>
+            {row.original.status}
+        </div>
     },{
         accessorKey: "createdAt",
         header:({column})=>(<DataTableColumnHeader column={column} title='Request Date' />),

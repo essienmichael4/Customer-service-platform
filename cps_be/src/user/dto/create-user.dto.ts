@@ -62,3 +62,72 @@ export class FindUsersDto {
     @IsOptional()
     email?:string
 }
+
+export class AddressDto {
+    // @ApiProperty({
+    //     description: "Country name",
+    //     example: "Ghana",
+    //     required: true
+    // })
+    @IsDefined()
+    @IsString()
+    @IsNotEmpty()
+    country:string 
+
+    // @ApiProperty({
+    //     description: "State or region name",
+    //     example: "Greater Accra",
+    //     required: false
+    // })
+    @IsOptional()
+    @IsString()
+    @IsNotEmpty()
+    state:string 
+
+    // @ApiProperty({
+    //     description: "City name",
+    //     example: "Greater Accra",
+    //     required: false
+    // })
+    @IsOptional()
+    @IsString()
+    @IsNotEmpty()
+    city:string 
+
+    // @ApiProperty({
+    //     description: "Street Address",
+    //     example: "12 Oakland Street",
+    //     required: true
+    // })
+    @IsDefined()
+    @IsString()
+    @IsNotEmpty()
+    addressLineOne:string 
+
+    // @ApiProperty({
+    //     description: "Street Address",
+    //     example: "12 Oakland Street",
+    //     required: true
+    // })
+    // @IsDefined()
+    @IsString()
+    @IsOptional()
+    addressLineTwo:string 
+
+    // @ApiProperty({
+    //     description: "Zip code",
+    //     example: '0000',
+    //     required: true
+    // })
+    // @IsString()
+    // zip:string
+
+    // @ApiProperty({
+    //     description: "Nearest Landmark",
+    //     example: "TDC Towers",
+    //     required: false
+    // })
+    @IsOptional()
+    @IsString()
+    landmark:string 
+}

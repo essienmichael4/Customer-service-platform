@@ -37,7 +37,7 @@ const Navbar = ({toggleNavbar}:NavbarProps) => {
               <DropdownMenuContent className="w-56">
                 <DropdownMenuLabel>My Account</DropdownMenuLabel>
                   <DropdownMenuSeparator />
-                  <DropdownMenuItem onClick={()=>{navigate(`../users/${auth!.id}`)}}>
+                  <DropdownMenuItem onClick={()=>{navigate(`../profile/${auth!.id}`)}}>
                     <User className="mr-2 h-4 w-4" />
                     <span>Profile</span>
                   <DropdownMenuShortcut>⇧⌘P</DropdownMenuShortcut>

@@ -1,8 +1,10 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Query, ParseIntPipe } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Query, ParseIntPipe, HttpCode, HttpStatus, UseGuards, UnauthorizedException } from '@nestjs/common';
 import { UserService } from './user.service';
-import { CreateUserDto } from './dto/create-user.dto';
-import { UpdateUserDto } from './dto/update-user.dto';
+import { AddressDto, CreateUserDto } from './dto/create-user.dto';
+import { UpdateUserDto, UpdateUserRequest } from './dto/update-user.dto';
 import { PageOptionsDto } from 'src/common/dto/pageOptions.dto';
+import { JwtGuard } from 'src/guards/jwt.guard';
+import { User, UserInfo } from 'src/decorators/user.decorator';
 
 @Controller('users')
 export class UserController {
@@ -34,8 +36,26 @@ export class UserController {
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
-    return this.userService.update(+id, updateUserDto);
+  update(@Param('id') id: string, @Body() updateUserDto: UpdateUserRequest) {
+    return this.userService.updateUser(+id, updateUserDto);
+  }
+
+  @UseGuards(JwtGuard)
+  @HttpCode(HttpStatus.OK)
+  @Post(":id/address")
+  addAddress(@Body() addressDto: AddressDto, @User() user:UserInfo) {
+    return this.userService.addAddress(user.sub.id, addressDto);
+  }
+
+  @UseGuards(JwtGuard)
+  @Patch(':id/address/:addressId')
+  updateAddress(@Param('id', ParseIntPipe) id: number, @Param('addressId', ParseIntPipe) addressId: number, @Body() addressDto: AddressDto, @User() user:UserInfo) {
+    try{
+      if(id !== user.sub.id) throw new UnauthorizedException()
+      return this.userService.updateAddress(addressId, addressDto)
+    }catch(err){
+      throw err
+    }
   }
 
   @Delete(':id')

@@ -19,21 +19,19 @@ const Ticket = () => {
     const [comment, setComment] = useState("")
     const navigate = useNavigate()
     const axios_instance_token = useAxiosToken()
-    // const queryClient = useQueryClient()
 
     const ticketsQuery = useQuery<Ticket>({
         queryKey: ["tickets", id],
         queryFn: async() => await axios_instance_token.get(`/tickets/${id}`).then(res => {
-            console.log(res.data);
-            
             return res.data
-        })
+        }),
+        staleTime: 10_000,       // data considered fresh for 10 seconds
+        refetchInterval: 10_000, // automatically refetch every 10 seconds
+        refetchOnWindowFocus: false, // prevent spammy reloads when switching tabs
     })
 
     const handleSend = async () => {
         if (!comment.trim()) return;
-
-        console.log(comment);
         
         await axios_instance_token.post(`/tickets/${id}/messages`, {
             text: comment,
@@ -67,7 +65,6 @@ const Ticket = () => {
         )
         : [];
 
-        console.log(timelineEvents);
         
     return (
         <div className="container px-4 mx-auto">

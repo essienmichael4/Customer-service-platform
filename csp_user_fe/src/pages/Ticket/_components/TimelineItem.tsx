@@ -12,7 +12,7 @@ interface TimelineEvent {
 
 const TimelineItem = ({ event }: { event: TimelineEvent }) => {
   if (event.type === "MESSAGE") {
-    const isRequester = event.author?.role === "ADMIN";
+    const isRequester = event.author?.role === "USER";
     return (
       <div
         className={`flex mt-2 gap-2 w-[70%] ${
@@ -31,7 +31,7 @@ const TimelineItem = ({ event }: { event: TimelineEvent }) => {
               · {new Date(event.createdAt).toLocaleTimeString()}
             </p>
           </div>
-          <p className="text-gray-400 text-xs ml-auto">{event.body}</p>
+          <p className={`text-gray-400 text-xs ${isRequester ? "" : "ml-auto"}`}>{event.body}</p>
         </div>
       </div>
     );
