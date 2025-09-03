@@ -38,7 +38,7 @@ const AddUser = ({trigger}:Props) => {
     }
 
     const addAdmin = async (data:RegisterUserSchemaType)=>{
-        const response = await axios_instance_token.post(`/auth/signup`, {
+        const response = await axios_instance_token.post(`/auth/signup/admin`, {
             ...data
         },)
 
@@ -52,7 +52,7 @@ const AddUser = ({trigger}:Props) => {
                 id: "add-admin"
             })
 
-            queryClient.invalidateQueries({queryKey: ["users"]})
+            queryClient.invalidateQueries({queryKey: ["users, admins"]})
 
             form.reset({
                 name: "",

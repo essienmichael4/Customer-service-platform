@@ -117,7 +117,7 @@ const AllCustomer = ({page, limit, setLimit, setPage}:FilterProps) => {
                         ) : (
                             <TableRow>
                             <TableCell colSpan={columns.length} className="h-24 text-center">
-                                No tickets added yet
+                                No customers added yet
                                 <p className="text-sm text-center text-muted-foreground">Try adding one</p>
                             </TableCell>
                             </TableRow>

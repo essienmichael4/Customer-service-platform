@@ -3,11 +3,7 @@ import { ArrowLeft, Loader2, PlusCircle } from 'lucide-react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { type User } from "@/lib/types"
 import useAxiosToken from '@/hooks/useAxiosToken'
-// import EditAccountDialog from './EditAccountDialog'
 import { Button } from '@/components/ui/button'
-// import ChangePassword from './ChangePassword'
-// import AddAnnouncement from './AddAnnouncement'
-// import EditAnnouncement from './EditAnnouncement'
 import { toast } from 'sonner'
 import axios from 'axios'
 import { Separator } from '@/components/ui/separator'
@@ -21,11 +17,6 @@ const UserProfile = () => {
     const {id} =useParams()
     const queryClient = useQueryClient()
     const axios_instance_token = useAxiosToken()
-
-    // const announcement = useQuery<AnnouncementType>({
-    //     queryKey: ["announcements",],
-    //     queryFn: async() => await axios_instance_token.get(`/announcements`).then(res => res.data)
-    // })
 
     const user = useQuery<User>({
       queryKey: ["users", id],
@@ -83,12 +74,12 @@ const UserProfile = () => {
             </button>
             <h4 className=" font-semibold">User Account</h4>
           </div>
-          <div className=" flex items-center justify-end gap-2 flex-wrap">
+          {user.data && <div className=" flex items-center justify-end gap-2 flex-wrap">
             <EditAccountDialog user={user.data as User} trigger={
             <Button className="border border-blue-700 text-blue-700 hover:bg-blue-700 hover:text-white bg-transparent">Edit Profile</Button>} />
             <ChangePassword id={Number(id)} trigger={
             <Button className="border border-emerald-700 text-emerald-700 hover:bg-emerald-700 hover:text-white bg-transparent">Change Password</Button>} />
-          </div>
+          </div>}
         </div>
         <div className='bg-white my-4 border border-gray-300 rounded-lg h-full relative'>
           <div className='w-full h-48 bg-gray-200 rounded-lg relative'>

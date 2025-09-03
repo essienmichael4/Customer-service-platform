@@ -2,7 +2,7 @@ import { Controller, Get, Post, Body, Patch, Param, Delete, HttpCode, HttpStatus
 import { AuthService } from './auth.service';
 import { CreateAuthDto } from './dto/create-auth.dto';
 import { UpdateAuthDto } from './dto/update-auth.dto';
-import { ForgottenPasswordDto, ResetPasswordDto, UserSignUpDto } from './dto/register.dto';
+import { AdminSignUpDto, ForgottenPasswordDto, ResetPasswordDto, UserSignUpDto } from './dto/register.dto';
 import { LoginReponse } from './dto/response.dto';
 import { UserSignInDto } from './dto/signin.dto';
 import { User, UserInfo } from 'src/decorators/user.decorator';
@@ -17,6 +17,16 @@ export class AuthController {
   async signup(@Body() body:UserSignUpDto){
     try{
       return this.authService.register(body);
+    }catch(err){
+      throw err
+    }
+  }
+
+  @HttpCode(HttpStatus.CREATED)
+  @Post("signup/admin")
+  async signupAdmin(@Body() body:AdminSignUpDto){
+    try{
+      return this.authService.registerAdmin(body);
     }catch(err){
       throw err
     }
