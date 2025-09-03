@@ -80,6 +80,7 @@ const UserProfile = () => {
             <ChangePassword id={Number(id)} trigger={
             <Button className="border border-emerald-700 text-emerald-700 hover:bg-emerald-700 hover:text-white bg-transparent">Change Password</Button>} />
           </div>}
+
         </div>
         <div className='bg-white my-4 border border-gray-300 rounded-lg h-full relative'>
           <div className='w-full h-48 bg-gray-200 rounded-lg relative'>

@@ -20,7 +20,7 @@ const UserProfile = () => {
       queryKey: ["users", id],
       queryFn: async() => await axios_instance_token.get(`/users/${id}`).then(res => {
         console.log(res.data);
-        
+
         return res.data
       })
     })
