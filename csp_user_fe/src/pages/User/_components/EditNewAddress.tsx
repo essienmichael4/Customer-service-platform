@@ -1,6 +1,6 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
-import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel } from '@/components/ui/form'
+import { Form, FormControl, FormField, FormItem, FormLabel } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
@@ -107,7 +107,7 @@ const AddNewAddress = ({id, addressId, trigger, address}:Props) => {
                 id: "add-address"
             })
 
-            queryClient.invalidateQueries({queryKey: ["user"]})
+            queryClient.invalidateQueries({queryKey: ["user", id]})
             setOpen(prev => !prev)
         },onError: (err:any) => {
             if (axios.isAxiosError(err)){

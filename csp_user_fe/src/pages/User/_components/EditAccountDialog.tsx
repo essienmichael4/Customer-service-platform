@@ -5,7 +5,7 @@ import { useForm } from 'react-hook-form'
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
-import { useMutation } from '@tanstack/react-query'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
 import useAuth from '@/hooks/useAuth'
 import { toast } from 'sonner'
 import axios from 'axios'
@@ -24,6 +24,7 @@ interface Props{
 const EditAccountDialog = ({user, trigger}:Props) => {
     const {dispatch} = useAuth()
     const axios_instance_token = useAxiosToken()
+    const queryClient = useQueryClient()
     const [open, setOpen] = useState(false)
     const [phone, setPhone] = useState("")
 
@@ -54,7 +55,7 @@ const EditAccountDialog = ({user, trigger}:Props) => {
             })
 
             dispatch(data)
-
+            queryClient.invalidateQueries({queryKey: ["user", user.id]})
             setOpen(prev => !prev)
         },onError: (err:any) => {
             if (axios.isAxiosError(err)){

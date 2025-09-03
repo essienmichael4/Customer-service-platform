@@ -92,5 +92,5 @@ export type User = {
     role?: string,
     createdAt?: string,
     updatedAt?:string,
-    address: any
+    addresses: any
 }
