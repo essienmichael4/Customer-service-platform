@@ -6,6 +6,7 @@ import { Message } from "./message.entity";
 import { TicketType } from "./Type.entity";
 import { TicketLog } from "./log.entity";
 
+
 export enum TicketStatus {
   NEW = "NEW",
   OPEN = "OPEN",

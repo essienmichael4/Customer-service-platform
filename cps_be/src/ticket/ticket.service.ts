@@ -108,6 +108,7 @@ export class TicketService {
         this.upsertUserYearHistoryTickets(user.id, queryRunner),
         this.upsertUserMonthHistoryTickets(user.id, queryRunner),
       ]);
+      
       createTicketDto.assignee && await this.addTicketAssignee(ticket, queryRunner, assignee, user)
 
       await queryRunner.commitTransaction()
