@@ -7,7 +7,7 @@ import { User } from 'src/user/entities/user.entity';
 import { UserService } from 'src/user/user.service';
 import { Repository } from 'typeorm';
 import { compare } from 'bcryptjs';
-import { UserSignUpDto, ForgottenPasswordDto, ResetPasswordDto } from './dto/register.dto';
+import { UserSignUpDto, ForgottenPasswordDto, ResetPasswordDto, AdminSignUpDto } from './dto/register.dto';
 import { UserAuthReponse, LoginReponse } from './dto/response.dto';
 import { UserSignInDto } from './dto/signin.dto';
 
@@ -38,6 +38,35 @@ async findUser(email:string){
       if(userExists) throw new ConflictException("Email already exists")
 
       const newUser = await this.userService.create(userSignUpDto)
+      const user = new UserAuthReponse(newUser)
+
+      const payload = {
+        username: user.email,
+        sub: {
+            id: user.id,
+            name: user.name,
+            role: user.role
+        }
+      }
+
+      return new LoginReponse({
+        ...user, 
+        backendTokens: {
+          accessToken: await this.signAuthPayload(payload), 
+          refreshToken: await this.signRefreshPayload(payload)
+        }
+      })
+    }catch(err){
+      throw err
+    }
+  }
+
+  async registerAdmin(userSignUpDto:AdminSignUpDto){
+    try{
+      const userExists = await this.findUser(userSignUpDto.email)
+      if(userExists) throw new ConflictException("Email already exists")
+
+      const newUser = await this.userService.create({...userSignUpDto, password: process.env.ADMIN_PASSWORD})
       const user = new UserAuthReponse(newUser)
 
       const payload = {

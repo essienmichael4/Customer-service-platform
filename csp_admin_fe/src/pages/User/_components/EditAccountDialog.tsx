@@ -34,12 +34,9 @@ const EditAccountDialog = ({user, trigger}:Props) => {
 
     const form = useForm<UserUpdateSchemaType>({
         resolver:zodResolver(UserUpdateSchema),
-        defaultValues: user ? {
+        defaultValues: user && {
             name: user.name,
             email: user.email
-        } : {
-            name: "",
-            email: ""
         }
     })
 
@@ -61,10 +58,7 @@ const EditAccountDialog = ({user, trigger}:Props) => {
 
             dispatch(data)
 
-            form.reset({
-                email: "",
-                name: ""
-            })
+            form.reset({})
 
             setOpen(prev => !prev)
         },onError: (err:any) => {

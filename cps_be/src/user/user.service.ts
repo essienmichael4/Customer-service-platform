@@ -39,7 +39,8 @@ export class UserService {
         user
       }
 
-      const address = await this.addressRepo.save(saveEntity) 
+      const address = await this.addressRepo.save(saveEntity)
+
 
       return address
     }catch(err){
@@ -74,6 +75,7 @@ export class UserService {
 
   async findAll(pageOptionsDto:PageOptionsDto) {
     const clients = await this.userRepo.findAndCount({
+      where: {role: Role.USER},
       order:{
         id: "DESC"
       },
@@ -105,6 +107,7 @@ export class UserService {
 
   async findOne(id: number) {
     return await this.userRepo.findOne({
+      relations: {addresses: true},
       where: {
         id
       }

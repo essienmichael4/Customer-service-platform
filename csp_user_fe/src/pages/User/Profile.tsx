@@ -19,6 +19,8 @@ const UserProfile = () => {
     const user = useQuery<User>({
       queryKey: ["users", id],
       queryFn: async() => await axios_instance_token.get(`/users/${id}`).then(res => {
+        console.log(res.data);
+
         return res.data
       })
     })
@@ -71,32 +73,34 @@ const UserProfile = () => {
             <Separator />
             <div className="my-4">
               <h4 className="text-xl font-semibold">User Address</h4>
-              <div className='flex flex-wrap gap-8'>
-                <div>
-                  <span className='text-xs text-gray-300'>Country</span>
-                  <p>{user.data?.address?.country ? user.data?.address?.country : "-"}</p>
+              {user.data?.addresses.map((address:any) => {
+                return <div className='flex flex-wrap gap-8'>
+                  <div>
+                    <span className='text-xs text-gray-300'>Country</span>
+                    <p>{address?.country ? address?.country : "-"}</p>
+                  </div>
+                  <div>
+                    <span className='text-xs text-gray-300'>State</span>
+                    <p>{address?.state ? address?.state : "-"}</p>
+                  </div>
+                  <div>
+                    <span className='text-xs text-gray-300'>City</span>
+                    <p>{address?.city ? address?.city : "-"}</p>
+                  </div>
+                  <div>
+                    <span className='text-xs text-gray-300'>Street Address</span>
+                    <p>{address?.addressLineOne ? address?.addressLineOne : "-"}</p>
+                  </div>
+                  <div>
+                    <span className='text-xs text-gray-300'>Nearest Landmark</span>
+                    <p>{address?.landmark ? address?.landmark : "-"}</p>
+                  </div>
+                  {/* <div>
+                    <span className='text-xs text-gray-300'>Zip</span>
+                    <p>{user.data?.address?.zip ? user.data?.address?.zip : "-"}</p>
+                  </div> */}
                 </div>
-                <div>
-                  <span className='text-xs text-gray-300'>State</span>
-                  <p>{user.data?.address?.state ? user.data?.address?.state : "-"}</p>
-                </div>
-                <div>
-                  <span className='text-xs text-gray-300'>City</span>
-                  <p>{user.data?.address?.city ? user.data?.address?.city : "-"}</p>
-                </div>
-                <div>
-                  <span className='text-xs text-gray-300'>Street Address</span>
-                  <p>{user.data?.address?.addressLine ? user.data?.address?.addressLine : "-"}</p>
-                </div>
-                <div>
-                  <span className='text-xs text-gray-300'>Nearest Landmark</span>
-                  <p>{user.data?.address?.landmark ? user.data?.address?.landmark : "-"}</p>
-                </div>
-                {/* <div>
-                  <span className='text-xs text-gray-300'>Zip</span>
-                  <p>{user.data?.address?.zip ? user.data?.address?.zip : "-"}</p>
-                </div> */}
-              </div>
+              })}
             </div>
           </div>
         </div>

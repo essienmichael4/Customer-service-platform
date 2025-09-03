@@ -7,6 +7,7 @@ import { join } from 'path';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { AuthModule } from './auth/auth.module';
 import { TicketModule } from './ticket/ticket.module';
+import { StatsModule } from './stats/stats.module';
 
 @Module({
   imports: [
@@ -25,7 +26,7 @@ import { TicketModule } from './ticket/ticket.module';
         entities: [join(process.cwd(), 'dist/**/*.entity.js')],
         synchronize:true
       })
-    }),UserModule, AuthModule, TicketModule],
+    }),UserModule, AuthModule, TicketModule, StatsModule],
   controllers: [AppController],
   providers: [AppService],
 })
