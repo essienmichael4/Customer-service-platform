@@ -14,7 +14,6 @@ const Tickets = () => {
         <div className="lg:container px-4 mx-auto text-sm min-h-[90vh]">
             <CreateTicketModal page={page} limit={limit} open={open} onOpenChange={handleOpenChange}/>
             <div className="mt-4 flex justify-between items-center">
-                {/* <h3 className="font-bold">Tickets</h3> */}
                 <div className="w-full sm:w-[320px]">
                     <div className="flex w-full border h-full items-center px-2 py-2 gap-2 rounded-md focus-within:border-gray-500">
                     <Search className="h-5 w-5 text-gray-400 pointer-events-none" />
