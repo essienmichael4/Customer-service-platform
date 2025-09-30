@@ -26,11 +26,11 @@ export const AuthReducer = (state: AuthType | undefined, action: Action) =>{
 
 export const AuthProvider = ({children}: {children: React.ReactNode}) => {
     const [auth, dispatch] = useReducer(AuthReducer, undefined, ()=>{
-        const localData = sessionStorage.getItem("auth")
+        const localData = sessionStorage.getItem("auth-admin")
         return localData ? JSON.parse(localData) : undefined
     })
     useEffect(()=>{
-        auth != undefined ? sessionStorage.setItem("auth", JSON.stringify(auth)) : sessionStorage.removeItem("auth")
+        auth != undefined ? sessionStorage.setItem("auth-admin", JSON.stringify(auth)) : sessionStorage.removeItem("auth")
     }, [auth])
 
     return (
